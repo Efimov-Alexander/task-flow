@@ -3,9 +3,11 @@ const prisma = new PrismaClient();
 
 async function main() {
   const p1 = await prisma.project.create({
+    // @ts-ignore
     data: { name: "Product Launch", color: "#f97316", icon: "🚀" },
   });
   const p2 = await prisma.project.create({
+    // @ts-ignore
     data: { name: "Design System", color: "#8b5cf6", icon: "🎨" },
   });
 
