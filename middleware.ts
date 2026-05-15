@@ -10,15 +10,18 @@ export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   const isAuthPage =
-    pathname.startsWith("/login") ||
-    pathname.startsWith("/register");
+    pathname === "/login" ||
+    pathname === "/register";
 
-  if (!isLoggedIn && !isAuthPage) {
-    return NextResponse.redirect(new URL("/login", req.url));
-  }
+  const isProtected =
+    !pathname.startsWith("/api") &&
+    !pathname.startsWith("/_next") &&
+    !isAuthPage;
 
-  if (isLoggedIn && isAuthPage) {
-    return NextResponse.redirect(new URL("/", req.url));
+  if (!isLoggedIn && isProtected) {
+    const url = new URL("/login", req.url);
+    url.searchParams.set("callbackUrl", pathname);
+    return NextResponse.redirect(url);
   }
 
   return NextResponse.next();
