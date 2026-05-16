@@ -125,10 +125,10 @@ function useTasks(projectId: string | null) {
 
 // ─── Small Components ─────────────────────────────────────────────────────────
 
-const Avatar = ({ initials, size = 28 }: { initials: string; size?: number }) => (
+const Avatar = ({ initials, size = 28 }: { initials?: string | null; size?: number }) => (
   <div style={{
     width: size, height: size, borderRadius: "50%",
-    background: AVATARS[initials] || "#94a3b8",
+    background: initials ? AVATARS[initials] : "#94a3b8",
     display: "flex", alignItems: "center", justifyContent: "center",
     fontSize: size * 0.35, fontWeight: 700, color: "white",
     fontFamily: "'DM Sans', sans-serif", flexShrink: 0,
@@ -502,7 +502,7 @@ export default function TaskFlow() {
 
         {/* User */}
         <div style={{ padding: "16px 20px", borderTop: "1px solid #1e1e24", display: "flex", alignItems: "center", gap: 10 }}>
-          <Avatar initials={session?.user?.name[0]} />
+          <Avatar initials={session?.user?.name?.[0]} />
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: 12, fontWeight: 600, color: "#e2e8f0" }}>{session?.user?.name}</div>
             <div style={{ fontSize: 10, color: "#475569" }}>{session?.user?.email}</div>
