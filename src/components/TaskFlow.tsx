@@ -502,10 +502,10 @@ export default function TaskFlow() {
 
         {/* User */}
         <div style={{ padding: "16px 20px", borderTop: "1px solid #1e1e24", display: "flex", alignItems: "center", gap: 10 }}>
-          <Avatar initials="AK" />
+          <Avatar initials={session?.user?.name[0]} />
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 12, fontWeight: 600, color: "#e2e8f0" }}>Alex Kim</div>
-            <div style={{ fontSize: 10, color: "#475569" }}>alex@company.co</div>
+            <div style={{ fontSize: 12, fontWeight: 600, color: "#e2e8f0" }}>{session?.user?.name}</div>
+            <div style={{ fontSize: 10, color: "#475569" }}>{session?.user?.email}</div>
           </div>
           <button
             onClick={() => signOut({ callbackUrl: "/login" })}
