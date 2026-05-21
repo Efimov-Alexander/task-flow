@@ -13,11 +13,11 @@ async function main() {
 
   await prisma.task.createMany({
     data: [
-      { title: "Define MVP feature set", section: "Todo", priority: "High", assignee: "AK", due: "Mar 10", projectId: p1.id },
-      { title: "Create onboarding mockups", section: "In Progress", priority: "Medium", assignee: "JS", due: "Mar 12", projectId: p1.id },
-      { title: "Write press release", section: "Done", priority: "Low", assignee: "MR", due: "Mar 5", done: true, projectId: p1.id },
-      { title: "Set up component library", section: "Todo", priority: "High", assignee: "JS", due: "Mar 14", subtasks: 7, projectId: p2.id },
-      { title: "Document color tokens", section: "In Progress", priority: "Medium", assignee: "MR", due: "Mar 11", projectId: p2.id },
+      { title: "Define MVP feature set", section: "Todo", priority: "High", due: "Mar 10", projectId: p1.id },
+      { title: "Create onboarding mockups", section: "In Progress", priority: "Medium", due: "Mar 12", projectId: p1.id },
+      { title: "Write press release", section: "Done", priority: "Low", due: "Mar 5", done: true, projectId: p1.id },
+      { title: "Set up component library", section: "Todo", priority: "High", due: "Mar 14", subtasks: 7, projectId: p2.id },
+      { title: "Document color tokens", section: "In Progress", priority: "Medium", due: "Mar 11", projectId: p2.id },
     ],
   });
 }

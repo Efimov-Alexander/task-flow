@@ -1478,7 +1478,7 @@ function TaskCard({task, project, isDragging, onDragStart, onDragEnd, onToggle, 
                             size={40}
                         />
                         {task.due &&
-                            <span style={{fontSize: 11, color: "#475569", marginLeft: "auto"}}>📅 {task.due}</span>}
+                            <span style={{fontSize: 11, whiteSpace: 'nowrap', color: "#475569", marginLeft: "auto"}}>📅 {task.due}</span>}
                     </div>
                     {task.subtasks > 0 && (
                         <div style={{marginTop: 8, display: "flex", alignItems: "center", gap: 4}}>
@@ -1536,7 +1536,7 @@ function ListRow({task, project, onToggle, onDelete, onMove, onSelect, selected}
             }}>{task.title}</span>
             <PriorityBadge priority={task.priority}/>
             {task.due &&
-                <span style={{fontSize: 11, color: "#475569", width: 60, textAlign: "right"}}>📅 {task.due}</span>}
+                <span style={{fontSize: 11, whiteSpace: 'nowrap', color: "#475569", width: 'fit-content', textAlign: "right"}}>📅 {task.due}</span>}
             {hovered && (
                 <div style={{display: "flex", gap: 4}} onClick={e => e.stopPropagation()}>
                     {["Todo", "In Progress", "Done"].filter(s => s !== task.section).map(s => {
@@ -1553,7 +1553,12 @@ function ListRow({task, project, onToggle, onDelete, onMove, onSelect, selected}
                     })}
                 </div>
             )}
-            <Avatar initials={task.assignee} size={22}/>
+            <Avatar
+                initials={task.assignee?.name
+                    ? task.assignee.name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2)
+                    : task.assignee?.email?.[0].toUpperCase() ?? "?"}
+                size={40}
+            />
             {hovered && (
                 <button
                     onClick={e => {
