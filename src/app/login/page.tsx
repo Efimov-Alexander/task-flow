@@ -51,7 +51,7 @@ export default function LoginPage() {
             display: "flex", alignItems: "center", justifyContent: "center",
             fontSize: 24, margin: "0 auto 14px",
           }}>⚡</div>
-          <div style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 26, color: "#dfebff", letterSpacing: "-0.03em" }}>
+          <div style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 26, color: "#505050", letterSpacing: "-0.03em" }}>
             TaskFlow
           </div>
           <div style={{ color: "#94a3b8", fontSize: 14, marginTop: 6 }}>

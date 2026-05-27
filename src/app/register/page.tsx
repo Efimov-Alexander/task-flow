@@ -117,7 +117,7 @@ export default function RegisterPage() {
             fontFamily: "'Syne', sans-serif",
             fontWeight: 800,
             fontSize: 26,
-            color: "#dfebff",
+            color: "#505050",
             letterSpacing: "-0.03em"
           }}>
             TaskFlow
