@@ -93,7 +93,7 @@ export default function RegisterPage() {
 
   return (
     <div style={{
-      minHeight: "100vh", background: "#f1f5f9",
+      minHeight: "100vh", background: "#eef8ff",
       display: "flex", alignItems: "center", justifyContent: "center",
       fontFamily: "'DM Sans', sans-serif",
     }}>
@@ -102,7 +102,7 @@ export default function RegisterPage() {
         rel="stylesheet"/>
       <style>{`* { box-sizing: border-box; } @keyframes spin { to { transform: rotate(360deg); } }`}</style>
 
-      <div style={{width: "100%", maxWidth: 420, padding: "0 20px"}}>
+      <div style={{ width: "100%", maxWidth: 420, padding: "0 20px"}}>
 
         {/* Logo */}
         <div style={{textAlign: "center", marginBottom: 36}}>

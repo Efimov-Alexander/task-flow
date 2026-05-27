@@ -107,7 +107,7 @@ export default function MembersModal({
     }} onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
 
       <div style={{
-        background: "#ededed", border: "1px solid #cbd5e1",
+        background: "#eef8ff", border: "1px solid #cbd5e1",
         borderRadius: 16, padding: 28, width: 460,
         boxShadow: "0 25px 60px rgba(0,0,0,0.6)",
         maxHeight: "85vh", display: "flex", flexDirection: "column",

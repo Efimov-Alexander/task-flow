@@ -211,7 +211,7 @@ function NewProjectModal({
             <div style={{
                 border: "1px solid #cbd5e1",
                 borderRadius: 16, padding: 28, width: 420,
-                background: "#ededed"
+                background: "#eef8ff"
             }}>
                 <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24}}>
           <span style={{fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 18, color: "#505050"}}>
