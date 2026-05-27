@@ -34,7 +34,7 @@ export default function LoginPage() {
 
   return (
     <div style={{
-      minHeight: "100vh", background: "#0f0f11",
+      minHeight: "100vh", background: "#f1f5f9",
       display: "flex", alignItems: "center", justifyContent: "center",
       fontFamily: "'DM Sans', sans-serif",
     }}>
@@ -47,21 +47,21 @@ export default function LoginPage() {
         <div style={{ textAlign: "center", marginBottom: 36 }}>
           <div style={{
             width: 48, height: 48, borderRadius: 14,
-            background: "linear-gradient(135deg, #f97316, #ec4899)",
+            background: "linear-gradient(#fde4d8, #ffae37)",
             display: "flex", alignItems: "center", justifyContent: "center",
             fontSize: 24, margin: "0 auto 14px",
           }}>⚡</div>
-          <div style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 26, color: "#fff", letterSpacing: "-0.03em" }}>
+          <div style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 26, color: "#dfebff", letterSpacing: "-0.03em" }}>
             TaskFlow
           </div>
-          <div style={{ color: "#475569", fontSize: 14, marginTop: 6 }}>
+          <div style={{ color: "#94a3b8", fontSize: 14, marginTop: 6 }}>
             Sign in to your workspace
           </div>
         </div>
 
         {/* Card */}
         <div style={{
-          background: "#141417", border: "1px solid #1e1e24",
+          background: "#dfebff", border: "1px solid #0f172a",
           borderRadius: 16, padding: 28,
           boxShadow: "0 25px 60px rgba(0,0,0,0.4)",
         }}>
@@ -84,14 +84,14 @@ export default function LoginPage() {
               onKeyDown={e => e.key === "Enter" && handleSubmit()}
               placeholder="you@company.com"
               style={{
-                width: "100%", background: "#0f0f11",
-                border: "1px solid #1e1e24", borderRadius: 8,
-                padding: "11px 14px", color: "#e2e8f0", fontSize: 14,
+                width: "100%", background: "#f1f5f9",
+                border: "1px solid #0f172a", borderRadius: 8,
+                padding: "11px 14px", color: "#0f172a", fontSize: 14,
                 outline: "none", fontFamily: "'DM Sans', sans-serif",
                 transition: "border-color 0.15s",
               }}
               onFocus={e => (e.target.style.borderColor = "#f97316")}
-              onBlur={e => (e.target.style.borderColor = "#1e1e24")}
+              onBlur={e => (e.target.style.borderColor = "#0f172a")}
             />
           </div>
 
@@ -106,14 +106,14 @@ export default function LoginPage() {
               onKeyDown={e => e.key === "Enter" && handleSubmit()}
               placeholder="••••••••"
               style={{
-                width: "100%", background: "#0f0f11",
-                border: "1px solid #1e1e24", borderRadius: 8,
-                padding: "11px 14px", color: "#e2e8f0", fontSize: 14,
+                width: "100%", background: "#f1f5f9",
+                border: "1px solid #0f172a", borderRadius: 8,
+                padding: "11px 14px", color: "#0f172a", fontSize: 14,
                 outline: "none", fontFamily: "'DM Sans', sans-serif",
                 transition: "border-color 0.15s",
               }}
               onFocus={e => (e.target.style.borderColor = "#f97316")}
-              onBlur={e => (e.target.style.borderColor = "#1e1e24")}
+              onBlur={e => (e.target.style.borderColor = "#0f172a")}
             />
           </div>
 
@@ -123,7 +123,7 @@ export default function LoginPage() {
             style={{
               width: "100%", background: loading ? "#7c3a1a" : "#f97316",
               border: "none", borderRadius: 10, padding: "12px 0",
-              color: "#fff", fontWeight: 700, fontSize: 14,
+              color: "#dfebff", fontWeight: 700, fontSize: 14,
               cursor: loading ? "not-allowed" : "pointer",
               fontFamily: "'DM Sans', sans-serif",
               boxShadow: "0 0 24px #f9731644",
@@ -133,7 +133,7 @@ export default function LoginPage() {
           >
             {loading ? (
               <>
-                <div style={{ width: 16, height: 16, border: "2px solid #fff4", borderTopColor: "#fff", borderRadius: "50%", animation: "spin 0.7s linear infinite" }} />
+                <div style={{ width: 16, height: 16, border: "2px solid #fff4", borderTopColor: "#dfebff", borderRadius: "50%", animation: "spin 0.7s linear infinite" }} />
                 Signing in…
               </>
             ) : "Sign in →"}
@@ -142,7 +142,7 @@ export default function LoginPage() {
           <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
         </div>
 
-        <div style={{ textAlign: "center", marginTop: 20, fontSize: 14, color: "#475569" }}>
+        <div style={{ textAlign: "center", marginTop: 20, fontSize: 14, color: "#94a3b8" }}>
           Don't have an account?{" "}
           <Link href="/register" style={{ color: "#f97316", fontWeight: 600, textDecoration: "none" }}>
             Create one

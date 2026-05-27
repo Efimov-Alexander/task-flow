@@ -9,7 +9,7 @@ export const CreateProjectSchema = z.object({
 export const CreateTaskSchema = z.object({
   title: z.string().min(1).max(200),
   projectId: z.string().cuid(),
-  section: z.enum(["Todo", "In Progress", "Done"]).default("Todo"),
+  section: z.enum(["Backlog", "Todo", "In Progress", "Testing", "Done"]).default("Todo"),
   priority: z.enum(["High", "Medium", "Low"]).default("Medium"),
   assigneeId: z.string().cuid().optional(),  // ← было assignee: z.string()
   due: z.string().optional(),
@@ -18,7 +18,7 @@ export const CreateTaskSchema = z.object({
 export const UpdateTaskSchema = z.object({
   title: z.string().min(1).max(200).optional(),
   description: z.string().nullable().optional(), // ← добавь
-  section: z.enum(["Todo", "In Progress", "Done"]).optional(),
+  section: z.enum(["Backlog", "Todo", "In Progress", "Testing", "Done"]).optional(),
   priority: z.enum(["High", "Medium", "Low"]).optional(),
   done: z.boolean().optional(),
   assigneeId: z.string().cuid().nullable().optional(),

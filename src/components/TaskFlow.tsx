@@ -1,7 +1,7 @@
 "use client";
 
-import {useState, useRef, useEffect, useCallback} from "react";
-import {signIn, signOut, useSession} from "next-auth/react";
+import {useCallback, useEffect, useRef, useState} from "react";
+import {signOut, useSession} from "next-auth/react";
 import MembersModal from "./MembersModal";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -35,7 +35,7 @@ type Task = {
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const SECTIONS = ["Todo", "In Progress", "Done"];
+const SECTIONS = ["Backlog", "Todo", "In Progress", "Testing", "Done"];
 const PRIORITY_COLORS: Record<string, string> = {High: "#ef4444", Medium: "#f97316", Low: "#6b7280"};
 const PRIORITY_BG: Record<string, string> = {High: "#ffacac", Medium: "#ffd39e", Low: "#9aceff"};
 const AVATARS: Record<string, string> = {AK: "#f43f5e", JS: "#3b82f6", MR: "#10b981"};
@@ -135,11 +135,12 @@ function useTasks(projectId: string | null) {
 const Avatar = ({initials, size = 28}: { initials?: string | null; size?: number }) => (
     <div style={{
         width: size, height: size, borderRadius: "50%",
-        background: initials ? AVATARS[initials] : "#94a3b8",
+        background: "#d6e1ff",
         display: "flex", alignItems: "center", justifyContent: "center",
-        fontSize: size * 0.35, fontWeight: 700, color: "white",
+        fontSize: size * 0.35, fontWeight: 700,
         fontFamily: "'DM Sans', sans-serif", flexShrink: 0,
         letterSpacing: "-0.02em",
+        border: '1px solid black',
     }}>{initials}</div>
 );
 
@@ -156,7 +157,7 @@ const PriorityBadge = ({priority}: { priority: string }) => (
 
 const Spinner = () => (
     <div style={{
-        width: 18, height: 18, border: "2px solid #1e1e24",
+        width: 18, height: 18, border: "2px solid #0f172a",
         borderTopColor: "#f97316", borderRadius: "50%",
         animation: "spin 0.7s linear infinite",
     }}/>
@@ -208,18 +209,18 @@ function NewProjectModal({
             if (e.target === e.currentTarget) onClose();
         }}>
             <div style={{
-                background: "#141417", border: "1px solid #2d2d35",
+                border: "1px solid #cbd5e1",
                 borderRadius: 16, padding: 28, width: 420,
-                boxShadow: "0 25px 60px rgba(0,0,0,0.6)",
+                background: "#ededed"
             }}>
                 <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24}}>
-          <span style={{fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 18, color: "#fff"}}>
+          <span style={{fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 18, color: "#505050"}}>
             New Project
           </span>
                     <button onClick={onClose} style={{
                         background: "none",
                         border: "none",
-                        color: "#475569",
+                        color: "#94a3b8",
                         cursor: "pointer",
                         fontSize: 20
                     }}>×
@@ -229,13 +230,13 @@ function NewProjectModal({
                 {/* Preview */}
                 <div style={{
                     display: "flex", alignItems: "center", gap: 12,
-                    padding: "12px 16px", background: "#0f0f11",
-                    borderRadius: 10, marginBottom: 20, border: "1px solid #1e1e24",
+                    padding: "12px 16px", background: "#f1f5f9",
+                    borderRadius: 10, marginBottom: 20, border: "1px solid #0f172a",
                 }}>
                     <span style={{fontSize: 22}}>{icon}</span>
                     <span style={{
                         fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 15,
-                        color: name ? "#e2e8f0" : "#475569",
+                        color: name ? "#0f172a" : "#94a3b8",
                         borderLeft: `3px solid ${color}`, paddingLeft: 10,
                     }}>
             {name || "Project name…"}
@@ -265,10 +266,10 @@ function NewProjectModal({
                         onKeyDown={e => e.key === "Enter" && handleSubmit()}
                         placeholder="e.g. Q3 Roadmap"
                         style={{
-                            width: "100%", background: "#0f0f11",
-                            border: `1px solid ${error ? "#ef4444" : "#1e1e24"}`,
+                            width: "100%", background: "#f1f5f9",
+                            border: `1px solid ${error ? "#ef4444" : "#0f172a"}`,
                             borderRadius: 8, padding: "10px 14px",
-                            color: "#e2e8f0", fontSize: 14, outline: "none",
+                            color: "#0f172a", fontSize: 14, outline: "none",
                             fontFamily: "'DM Sans', sans-serif", boxSizing: "border-box",
                         }}
                     />
@@ -292,8 +293,8 @@ function NewProjectModal({
                         {PROJECT_ICONS.map(i => (
                             <button key={i} onClick={() => setIcon(i)} style={{
                                 width: 38, height: 38, borderRadius: 8, fontSize: 18,
-                                background: icon === i ? "#1e1e28" : "#0f0f11",
-                                border: `1.5px solid ${icon === i ? color : "#1e1e24"}`,
+                                background: icon === i ? "#f8fafc" : "#f1f5f9",
+                                border: `1.5px solid ${icon === i ? color : "#0f172a"}`,
                                 cursor: "pointer", transition: "all 0.15s",
                                 boxShadow: icon === i ? `0 0 8px ${color}44` : "none",
                             }}>{i}</button>
@@ -318,7 +319,7 @@ function NewProjectModal({
                         {PROJECT_COLORS.map(c => (
                             <button key={c} onClick={() => setColor(c)} style={{
                                 width: 28, height: 28, borderRadius: "50%", background: c,
-                                border: `2.5px solid ${color === c ? "#fff" : "transparent"}`,
+                                border: `2.5px solid ${color === c ? "#505050" : "transparent"}`,
                                 cursor: "pointer", transition: "all 0.15s",
                                 boxShadow: color === c ? `0 0 10px ${c}99` : "none",
                             }}/>
@@ -328,14 +329,14 @@ function NewProjectModal({
 
                 <div style={{display: "flex", gap: 10}}>
                     <button onClick={onClose} style={{
-                        flex: 1, background: "#1e1e24", border: "none", borderRadius: 10,
+                        flex: 1, background: "#0f172a", border: "none", borderRadius: 10,
                         padding: "11px 0", color: "#64748b", fontSize: 13, fontWeight: 600,
                         cursor: "pointer", fontFamily: "'DM Sans', sans-serif",
                     }}>Cancel
                     </button>
                     <button onClick={handleSubmit} disabled={saving} style={{
                         flex: 2, background: color, border: "none", borderRadius: 10,
-                        padding: "11px 0", color: "#fff", fontSize: 13, fontWeight: 700,
+                        padding: "11px 0", color: "#505050", fontSize: 13, fontWeight: 700,
                         cursor: saving ? "not-allowed" : "pointer", fontFamily: "'DM Sans', sans-serif",
                         opacity: saving ? 0.7 : 1,
                         boxShadow: `0 0 20px ${color}55`,
@@ -456,6 +457,8 @@ export default function TaskFlow() {
     const stats = {
         total: projectTasks.length,
         done: projectTasks.filter(t => t.done).length,
+        testing: projectTasks.filter(t => t.section === "Testing").length,
+        backlog: projectTasks.filter(t => t.section === "Backlog").length,
         inProgress: projectTasks.filter(t => t.section === "In Progress").length,
     };
     const progress = stats.total > 0 ? Math.round((stats.done / stats.total) * 100) : 0;
@@ -463,10 +466,10 @@ export default function TaskFlow() {
     return (
         <div style={{
             fontFamily: "'DM Sans', sans-serif",
-            background: "#0f0f11",
+            background: "#f1f5f9",
             minHeight: "100vh",
             display: "flex",
-            color: "#e2e8f0",
+            color: "#0f172a",
             overflow: "hidden",
         }}>
             <style>{`
@@ -498,8 +501,8 @@ export default function TaskFlow() {
             <div style={{
                 width: sidebarOpen ? 240 : 0,
                 minWidth: sidebarOpen ? 240 : 0,
-                background: "#141417",
-                borderRight: "1px solid #1e1e24",
+                backgroundColor: "#e3f2ff",
+                borderRight: "1px solid #0f172a",
                 display: "flex", flexDirection: "column",
                 transition: "all 0.25s cubic-bezier(0.4,0,0.2,1)",
                 overflow: "hidden",
@@ -509,9 +512,10 @@ export default function TaskFlow() {
                 <div style={{padding: "20px 20px 0", display: "flex", alignItems: "center", gap: 10}}>
                     <div style={{
                         width: 32, height: 32, borderRadius: 10,
-                        background: "linear-gradient(135deg, #f97316, #ec4899)",
+                        background: "linear-gradient(#fde4d8, #ffae37)",
                         display: "flex", alignItems: "center", justifyContent: "center",
                         fontSize: 16,
+                        border: "1px solid #ffa67d",
                     }}>⚡
                     </div>
                     <span style={{
@@ -519,7 +523,7 @@ export default function TaskFlow() {
                         fontWeight: 800,
                         fontSize: 18,
                         letterSpacing: "-0.03em",
-                        color: "#fff"
+                        color: "#505050"
                     }}>TaskFlow</span>
                 </div>
 
@@ -529,7 +533,7 @@ export default function TaskFlow() {
                         fontSize: 10,
                         fontWeight: 700,
                         letterSpacing: "0.1em",
-                        color: "#475569",
+                        color: "#94a3b8",
                         textTransform: "uppercase",
                         paddingLeft: 12,
                         marginBottom: 8
@@ -550,8 +554,8 @@ export default function TaskFlow() {
                                      display: "flex", alignItems: "center", gap: 10,
                                      padding: "8px 12px", borderRadius: 8, marginBottom: 2,
                                      cursor: "pointer",
-                                     background: selectedProjectId === p.id ? "#1e1e28" : "transparent",
-                                     color: selectedProjectId === p.id ? "#e2e8f0" : "#64748b",
+                                     background: selectedProjectId === p.id ? "#f8fafc" : "transparent",
+                                     color: selectedProjectId === p.id ? "#0f172a" : "#64748b",
                                      fontSize: 13, fontWeight: 500,
                                      borderLeft: selectedProjectId === p.id ? `3px solid ${p.color}` : "3px solid transparent",
                                      transition: "all 0.15s",
@@ -564,7 +568,7 @@ export default function TaskFlow() {
                                     textOverflow: "ellipsis",
                                     whiteSpace: "nowrap"
                                 }}>{p.name}</span>
-                                <span style={{fontSize: 11, color: "#475569"}}>
+                                <span style={{fontSize: 11, color: "#94a3b8"}}>
                   {tasks.filter(t => t.projectId === p.id && !t.done).length || ""}
                 </span>
                             </div>
@@ -578,8 +582,8 @@ export default function TaskFlow() {
                             width: "100%",
                             padding: "9px 12px",
                             borderRadius: 8,
-                            border: "1.5px dashed #1e2433",
-                            fontSize: 12, color: "#475569", cursor: "pointer",
+                            border: "1.5px dashed #0f172a",
+                            fontSize: 12, color: "#94a3b8", cursor: "pointer",
                             textAlign: "center", fontWeight: 500,
                             background: "none",
                             fontFamily: "'DM Sans', sans-serif",
@@ -587,11 +591,11 @@ export default function TaskFlow() {
                         }}
                         onMouseEnter={e => {
                             (e.currentTarget as HTMLButtonElement).style.borderColor = "#334155";
-                            (e.currentTarget as HTMLButtonElement).style.color = "#94a3b8";
+                            (e.currentTarget as HTMLButtonElement).style.color = "#334155";
                         }}
                         onMouseLeave={e => {
-                            (e.currentTarget as HTMLButtonElement).style.borderColor = "#1e2433";
-                            (e.currentTarget as HTMLButtonElement).style.color = "#475569";
+                            (e.currentTarget as HTMLButtonElement).style.borderColor = "#0f172a";
+                            (e.currentTarget as HTMLButtonElement).style.color = "#94a3b8";
                         }}
                     >+ New Project
                     </button>
@@ -600,26 +604,26 @@ export default function TaskFlow() {
                 {/* User */}
                 <div style={{
                     padding: "16px 20px",
-                    borderTop: "1px solid #1e1e24",
+                    borderTop: "1px solid #0f172a",
                     display: "flex",
                     alignItems: "center",
                     gap: 10
                 }}>
                     <Avatar initials={session?.user?.name?.[0]}/>
                     <div style={{flex: 1}}>
-                        <div style={{fontSize: 12, fontWeight: 600, color: "#e2e8f0"}}>{session?.user?.name}</div>
-                        <div style={{fontSize: 10, color: "#475569"}}>{session?.user?.email}</div>
+                        <div style={{fontSize: 12, fontWeight: 600, color: "#0f172a"}}>{session?.user?.name}</div>
+                        <div style={{fontSize: 10, color: "#94a3b8"}}>{session?.user?.email}</div>
                     </div>
                     <button
                         onClick={() => signOut({callbackUrl: "/login"})}
                         title="Sign out"
                         style={{
-                            background: "none", border: "none", color: "#475569",
+                            background: "none", border: "none", color: "#94a3b8",
                             cursor: "pointer", fontSize: 16, padding: 4,
                             borderRadius: 6, transition: "color 0.15s",
                         }}
                         onMouseEnter={e => (e.currentTarget.style.color = "#ef4444")}
-                        onMouseLeave={e => (e.currentTarget.style.color = "#475569")}
+                        onMouseLeave={e => (e.currentTarget.style.color = "#94a3b8")}
                     >⏻
                     </button>
                 </div>
@@ -630,8 +634,8 @@ export default function TaskFlow() {
 
                 {/* Header */}
                 <div style={{
-                    background: "#141417",
-                    borderBottom: "1px solid #1e1e24",
+                    background: "#e3f2ff",
+                    borderBottom: "1px solid #0f172a",
                     padding: "0 24px",
                     display: "flex", alignItems: "center", gap: 16, height: 56,
                     flexShrink: 0,
@@ -658,7 +662,7 @@ export default function TaskFlow() {
                                     fontFamily: "'Syne', sans-serif",
                                     fontWeight: 700,
                                     fontSize: 16,
-                                    color: "#fff",
+                                    color: "#505050",
                                     letterSpacing: "-0.02em"
                                 }}>
                   {project.name}
@@ -677,7 +681,7 @@ export default function TaskFlow() {
                                 fontFamily: "'Syne', sans-serif",
                                 fontWeight: 700,
                                 fontSize: 16,
-                                color: "#475569"
+                                color: "#94a3b8"
                             }}>
                 Select a project
               </span>
@@ -687,8 +691,9 @@ export default function TaskFlow() {
                                 onClick={() => setShowMembers(true)}
                                 title="Manage members"
                                 style={{
-                                    background: "#1e1e24", border: "none", borderRadius: 8,
-                                    padding: "6px 12px", color: "#94a3b8", fontSize: 12,
+                                    border: '1px solid #505050',
+                                    background: "#ededed", borderRadius: 8,
+                                    padding: "6px 12px", color: "#334155", fontSize: 12,
                                     fontWeight: 600, cursor: "pointer", display: "flex",
                                     alignItems: "center", gap: 6,
                                 }}
@@ -705,7 +710,7 @@ export default function TaskFlow() {
                             left: 10,
                             top: "50%",
                             transform: "translateY(-50%)",
-                            color: "#475569",
+                            color: "#94a3b8",
                             fontSize: 13
                         }}>🔍</span>
                         <input
@@ -713,8 +718,8 @@ export default function TaskFlow() {
                             onChange={e => setSearch(e.target.value)}
                             placeholder="Search tasks..."
                             style={{
-                                background: "#0f0f11", border: "1px solid #1e1e24", borderRadius: 8,
-                                padding: "7px 12px 7px 32px", color: "#e2e8f0", fontSize: 13,
+                                background: "#f1f5f9", border: "1px solid #0f172a", borderRadius: 8,
+                                padding: "7px 12px 7px 32px", color: "#0f172a", fontSize: 13,
                                 outline: "none", width: 200, fontFamily: "'DM Sans', sans-serif",
                             }}
                         />
@@ -723,17 +728,17 @@ export default function TaskFlow() {
                     {/* View toggle */}
                     <div style={{
                         display: "flex",
-                        background: "#0f0f11",
+                        background: "#f1f5f9",
                         borderRadius: 8,
                         padding: 3,
                         gap: 2,
-                        border: "1px solid #1e1e24"
+                        border: "1px solid #0f172a"
                     }}>
                         {(["board", "list"] as const).map((v) => (
                             <button key={v} onClick={() => setView(v)} style={{
-                                background: view === v ? "#1e1e28" : "transparent",
+                                background: view === v ? "#f8fafc" : "transparent",
                                 border: "none", borderRadius: 6, padding: "5px 12px",
-                                color: view === v ? "#e2e8f0" : "#475569",
+                                color: view === v ? "#0f172a" : "#94a3b8",
                                 cursor: "pointer", fontSize: 14, transition: "all 0.15s",
                             }}>{v === "board" ? "⊞" : "☰"}</button>
                         ))}
@@ -743,9 +748,12 @@ export default function TaskFlow() {
                         onClick={() => project && setAddingTask("Todo")}
                         disabled={!project}
                         style={{
-                            background: project?.color ?? "#1e1e24",
+                            background: project?.color ?? "#0f172a",
                             border: "none", borderRadius: 8, padding: "8px 16px",
-                            color: "#fff", fontWeight: 600, fontSize: 13, cursor: project ? "pointer" : "not-allowed",
+                            color: "#505050",
+                            fontWeight: 600,
+                            fontSize: 13,
+                            cursor: project ? "pointer" : "not-allowed",
                             fontFamily: "'DM Sans', sans-serif",
                             boxShadow: project ? `0 0 20px ${project.color}44` : "none",
                             opacity: project ? 1 : 0.5,
@@ -758,24 +766,21 @@ export default function TaskFlow() {
                 {/* Progress bar */}
                 {project && (
                     <div style={{
-                        background: "#141417", borderBottom: "1px solid #1e1e24",
+                        background: "#e3f2ff", borderBottom: "1px solid #0f172a",
                         padding: "10px 24px", display: "flex", alignItems: "center", gap: 16, flexShrink: 0,
                     }}>
                         <div style={{display: "flex", gap: 20}}>
-                            {[{label: "Total", val: stats.total}, {
-                                label: "In Progress",
-                                val: stats.inProgress
-                            }, {label: "Done", val: stats.done}].map(s => (
+                            {[{label: "Total", val: stats.total}, {label: "Done", val: stats.done}].map(s => (
                                 <div key={s.label} style={{display: "flex", alignItems: "center", gap: 6}}>
-                                    <span style={{fontSize: 13, fontWeight: 700, color: "#e2e8f0"}}>{s.val}</span>
-                                    <span style={{fontSize: 11, color: "#475569"}}>{s.label}</span>
+                                    <span style={{fontSize: 13, fontWeight: 700, color: "#0f172a"}}>{s.val}</span>
+                                    <span style={{fontSize: 11, color: "#94a3b8"}}>{s.label}</span>
                                 </div>
                             ))}
                         </div>
                         <div style={{
                             flex: 1,
                             height: 4,
-                            background: "#1e1e24",
+                            background: "#b9d2ff",
                             borderRadius: 4,
                             overflow: "hidden",
                             maxWidth: 300
@@ -792,7 +797,7 @@ export default function TaskFlow() {
                 )}
 
                 {/* Content */}
-                <div style={{flex: 1, overflowY: "auto", padding: 24}}>
+                <div style={{background: '#eef8ff', flex: 1, overflowY: "auto", padding: 24}}>
 
                     {/* Empty state */}
                     {!project && !projectsLoading && (
@@ -816,7 +821,7 @@ export default function TaskFlow() {
                                 onClick={() => setShowNewProject(true)}
                                 style={{
                                     background: "#f97316", border: "none", borderRadius: 10,
-                                    padding: "10px 24px", color: "#fff", fontSize: 14, fontWeight: 600,
+                                    padding: "10px 24px", color: "#505050", fontSize: 14, fontWeight: 600,
                                     cursor: "pointer", fontFamily: "'DM Sans', sans-serif",
                                     boxShadow: "0 0 20px #f9731644",
                                 }}
@@ -835,7 +840,12 @@ export default function TaskFlow() {
                         <div style={{display: "flex", gap: 16, alignItems: "flex-start", minHeight: "100%"}}>
                             {SECTIONS.map(section => {
                                 const sectionTasks = projectTasks.filter(t => t.section === section);
-                                const sectionColor = section === "Todo" ? "#6366f1" : section === "In Progress" ? "#f97316" : "#10b981";
+                                const sectionColor =
+                                    section === "Backlog" ? "#64748b" :
+                                        section === "Todo" ? "#6366f1" :
+                                            section === "In Progress" ? "#f97316" :
+                                                section === "Testing" ? "#a855f7" :
+                                                    "#10b981";
                                 const isOver = dragOverSection === section && draggingId !== null && dragTask?.section !== section;
                                 return (
                                     <div
@@ -873,14 +883,14 @@ export default function TaskFlow() {
                                                 fontFamily: "'Syne', sans-serif",
                                                 fontWeight: 700,
                                                 fontSize: 13,
-                                                color: "#94a3b8",
+                                                color: "#334155",
                                                 letterSpacing: "-0.01em"
                                             }}>
                         {section.toUpperCase()}
                       </span>
                                             <span style={{
                                                 marginLeft: 4,
-                                                background: "#1e1e24",
+                                                background: "#b9d2ff",
                                                 color: "#64748b",
                                                 fontSize: 11,
                                                 fontWeight: 600,
@@ -926,8 +936,8 @@ export default function TaskFlow() {
 
                                             {addingTask === section ? (
                                                 <div style={{
-                                                    background: "#141417",
-                                                    border: "1px solid #2d2d35",
+                                                    background: "#b9d2ff",
+                                                    border: "1px solid #cbd5e1",
                                                     borderRadius: 10,
                                                     padding: 12
                                                 }}>
@@ -942,7 +952,7 @@ export default function TaskFlow() {
                                                         placeholder="Task name..."
                                                         style={{
                                                             width: "100%", background: "none", border: "none",
-                                                            color: "#e2e8f0", fontSize: 13, outline: "none",
+                                                            color: "#0f172a", fontSize: 13, outline: "none",
                                                             fontFamily: "'DM Sans', sans-serif", fontWeight: 500,
                                                         }}
                                                     />
@@ -952,7 +962,7 @@ export default function TaskFlow() {
                                                             border: "none",
                                                             borderRadius: 6,
                                                             padding: "5px 12px",
-                                                            color: "#fff",
+                                                            color: "#505050",
                                                             fontSize: 12,
                                                             fontWeight: 600,
                                                             cursor: "pointer",
@@ -960,7 +970,7 @@ export default function TaskFlow() {
                                                         }}>Add
                                                         </button>
                                                         <button onClick={() => setAddingTask(null)} style={{
-                                                            background: "#1e1e24",
+                                                            background: "#0f172a",
                                                             border: "none",
                                                             borderRadius: 6,
                                                             padding: "5px 12px",
@@ -981,10 +991,10 @@ export default function TaskFlow() {
                                                     }}
                                                     style={{
                                                         background: "none",
-                                                        border: "1.5px dashed #1e2433",
+                                                        border: "1.5px dashed #0f172a",
                                                         borderRadius: 10,
                                                         padding: "10px 12px",
-                                                        color: "#475569",
+                                                        color: "#94a3b8",
                                                         fontSize: 12,
                                                         fontWeight: 500,
                                                         cursor: "pointer",
@@ -995,11 +1005,11 @@ export default function TaskFlow() {
                                                     }}
                                                     onMouseEnter={e => {
                                                         (e.currentTarget as HTMLButtonElement).style.borderColor = "#334155";
-                                                        (e.currentTarget as HTMLButtonElement).style.color = "#94a3b8";
+                                                        (e.currentTarget as HTMLButtonElement).style.color = "#334155";
                                                     }}
                                                     onMouseLeave={e => {
-                                                        (e.currentTarget as HTMLButtonElement).style.borderColor = "#1e2433";
-                                                        (e.currentTarget as HTMLButtonElement).style.color = "#475569";
+                                                        (e.currentTarget as HTMLButtonElement).style.borderColor = "#0f172a";
+                                                        (e.currentTarget as HTMLButtonElement).style.color = "#94a3b8";
                                                     }}
                                                 >+ Add task</button>
                                             )}
@@ -1015,7 +1025,12 @@ export default function TaskFlow() {
                         <div style={{maxWidth: 900}}>
                             {SECTIONS.map(section => {
                                 const sectionTasks = projectTasks.filter(t => t.section === section);
-                                const sectionColor = section === "Todo" ? "#6366f1" : section === "In Progress" ? "#f97316" : "#10b981";
+                                const sectionColor =
+                                    section === "Backlog" ? "#64748b" :
+                                        section === "Todo" ? "#6366f1" :
+                                            section === "In Progress" ? "#f97316" :
+                                                section === "Testing" ? "#a855f7" :
+                                                    "#10b981";
                                 return (
                                     <div key={section} style={{marginBottom: 32}}>
                                         <div style={{
@@ -1024,7 +1039,7 @@ export default function TaskFlow() {
                                             gap: 8,
                                             marginBottom: 8,
                                             paddingBottom: 8,
-                                            borderBottom: "1px solid #1e1e24"
+                                            borderBottom: "1px solid #0f172a"
                                         }}>
                                             <div style={{
                                                 width: 8,
@@ -1037,10 +1052,10 @@ export default function TaskFlow() {
                                                 fontFamily: "'Syne', sans-serif",
                                                 fontWeight: 700,
                                                 fontSize: 12,
-                                                color: "#94a3b8",
+                                                color: "#334155",
                                                 letterSpacing: "0.05em"
                                             }}>{section.toUpperCase()}</span>
-                                            <span style={{color: "#475569", fontSize: 12}}>{sectionTasks.length}</span>
+                                            <span style={{color: "#94a3b8", fontSize: 12}}>{sectionTasks.length}</span>
                                         </div>
                                         {sectionTasks.map(task => (
                                             <ListRow
@@ -1072,22 +1087,22 @@ export default function TaskFlow() {
             {/* ── Task Detail Panel ── */}
             {selectedTask && project && (
                 <div style={{
-                    width: 340, background: "#141417",
-                    borderLeft: "1px solid #1e1e24",
+                    width: 340, background: "#e3f2ff",
+                    borderLeft: "1px solid #0f172a",
                     display: "flex", flexDirection: "column",
                     flexShrink: 0, overflow: "hidden",
                     animation: "fadeIn 0.2s ease",
                 }}>
                     <div style={{
-                        padding: "16px 20px", borderBottom: "1px solid #1e1e24",
+                        padding: "16px 20px", borderBottom: "1px solid #0f172a",
                         display: "flex", alignItems: "center", justifyContent: "space-between",
                     }}>
                         <span
-                            style={{fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 14, color: "#e2e8f0"}}>Task Details</span>
+                            style={{fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 14, color: "#0f172a"}}>Task Details</span>
                         <button onClick={() => setSelectedTask(null)} style={{
                             background: "none",
                             border: "none",
-                            color: "#475569",
+                            color: "#94a3b8",
                             cursor: "pointer",
                             fontSize: 18,
                             lineHeight: 1
@@ -1098,7 +1113,7 @@ export default function TaskFlow() {
                         <div style={{
                             fontSize: 15,
                             fontWeight: 600,
-                            color: "#e2e8f0",
+                            color: "#0f172a",
                             marginBottom: 20,
                             lineHeight: 1.4
                         }}>
@@ -1113,10 +1128,10 @@ export default function TaskFlow() {
                                 alignItems: "center",
                                 justifyContent: "space-between",
                                 padding: "10px 0",
-                                borderBottom: "1px solid #1e1e24"
+                                borderBottom: "1px solid #0f172a"
                             }}>
-                                <span style={{fontSize: 12, color: "#475569", fontWeight: 500}}>{row.label}</span>
-                                <span style={{fontSize: 12, color: "#94a3b8", fontWeight: 500}}>
+                                <span style={{fontSize: 12, color: "#94a3b8", fontWeight: 500}}>{row.label}</span>
+                                <span style={{fontSize: 12, color: "#334155", fontWeight: 500}}>
                     {(row as { icon?: string }).icon ? (row as { icon?: string }).icon + " " : ""}{row.val}
                   </span>
                             </div>
@@ -1126,9 +1141,9 @@ export default function TaskFlow() {
                             alignItems: "center",
                             justifyContent: "space-between",
                             padding: "10px 0",
-                            borderBottom: "1px solid #1e1e24"
+                            borderBottom: "1px solid #0f172a"
                         }}>
-                            <span style={{fontSize: 12, color: "#475569", fontWeight: 500}}>Due Date</span>
+                            <span style={{fontSize: 12, color: "#94a3b8", fontWeight: 500}}>Due Date</span>
                             <input
                                 type="date"
                                 value={selectedTask.due ?? ""}
@@ -1138,11 +1153,11 @@ export default function TaskFlow() {
                                     setSelectedTask(prev => prev ? {...prev, due} : null);
                                 }}
                                 style={{
-                                    background: "#1e1e24",
-                                    border: "1px solid #2d2d35",
+                                    background: "#b9d2ff",
+                                    border: "1px solid #cbd5e1",
                                     borderRadius: 8,
                                     padding: "5px 10px",
-                                    color: selectedTask.due ? "#e2e8f0" : "#475569",
+                                    color: selectedTask.due ? "#0f172a" : "#94a3b8",
                                     fontSize: 12,
                                     fontWeight: 500,
                                     outline: "none",
@@ -1151,7 +1166,7 @@ export default function TaskFlow() {
                                     transition: "border-color 0.15s",
                                 }}
                                 onFocus={e => (e.target.style.borderColor = project.color)}
-                                onBlur={e => (e.target.style.borderColor = "#2d2d35")}
+                                onBlur={e => (e.target.style.borderColor = "#cbd5e1")}
                             />
                         </div>
                         {(() => {
@@ -1164,41 +1179,41 @@ export default function TaskFlow() {
                                 <div style={{
                                     position: "relative",
                                     padding: "10px 0",
-                                    borderBottom: "1px solid #1e1e24"
+                                    borderBottom: "1px solid #0f172a"
                                 }}>
                                     <div style={{
                                         display: "flex",
                                         alignItems: "center",
                                         justifyContent: "space-between"
                                     }}>
-                                        <span style={{fontSize: 12, color: "#475569", fontWeight: 500}}>Assignee</span>
+                                        <span style={{fontSize: 12, color: "#94a3b8", fontWeight: 500}}>Assignee</span>
                                         <button
                                             onClick={() => setAssigneeOpen(o => !o)}
                                             style={{
                                                 display: "flex", alignItems: "center", gap: 8,
-                                                background: "#1e1e24", border: "1px solid #2d2d35",
+                                                background: "#b9d2ff", border: "1px solid #cbd5e1",
                                                 borderRadius: 8, padding: "5px 10px", cursor: "pointer",
                                                 transition: "all 0.15s",
                                             }}
-                                            onMouseEnter={e => (e.currentTarget.style.borderColor = "#475569")}
-                                            onMouseLeave={e => (e.currentTarget.style.borderColor = "#2d2d35")}
+                                            onMouseEnter={e => (e.currentTarget.style.borderColor = "#94a3b8")}
+                                            onMouseLeave={e => (e.currentTarget.style.borderColor = "#cbd5e1")}
                                         >
                                             {currentAssignee ? (
                                                 <>
                                                     <div style={{
                                                         width: 20, height: 20, borderRadius: "50%",
-                                                        background: AVATARS[initials] || "#94a3b8",
+                                                        background: AVATARS[initials] || "#334155",
                                                         display: "flex", alignItems: "center", justifyContent: "center",
-                                                        fontSize: 9, fontWeight: 700, color: "#fff",
+                                                        fontSize: 9, fontWeight: 700, color: "#505050",
                                                     }}>{initials}</div>
-                                                    <span style={{fontSize: 12, color: "#e2e8f0", fontWeight: 500}}>
+                                                    <span style={{fontSize: 12, color: "#0f172a", fontWeight: 500}}>
                 {currentAssignee.name ?? currentAssignee.email}
               </span>
                                                 </>
                                             ) : (
-                                                <span style={{fontSize: 12, color: "#475569"}}>Unassigned</span>
+                                                <span style={{fontSize: 12, color: "#94a3b8"}}>Unassigned</span>
                                             )}
-                                            <span style={{fontSize: 10, color: "#475569", marginLeft: 2}}>▾</span>
+                                            <span style={{fontSize: 10, color: "#94a3b8", marginLeft: 2}}>▾</span>
                                         </button>
                                     </div>
 
@@ -1206,7 +1221,7 @@ export default function TaskFlow() {
                                     {assigneeOpen && (
                                         <div style={{
                                             position: "absolute", right: 0, top: "100%", zIndex: 50,
-                                            background: "#1a1a22", border: "1px solid #2d2d35",
+                                            background: "#1a1a22", border: "1px solid #cbd5e1",
                                             borderRadius: 10, padding: 6, minWidth: 200,
                                             boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
                                             animation: "fadeIn 0.15s ease",
@@ -1233,9 +1248,9 @@ export default function TaskFlow() {
                                             >
                                                 <div style={{
                                                     width: 24, height: 24, borderRadius: "50%",
-                                                    background: "#2d2d35", border: "1.5px dashed #475569",
+                                                    background: "#cbd5e1", border: "1.5px dashed #94a3b8",
                                                     display: "flex", alignItems: "center", justifyContent: "center",
-                                                    fontSize: 12, color: "#475569",
+                                                    fontSize: 12, color: "#94a3b8",
                                                 }}>−
                                                 </div>
                                                 <span style={{fontSize: 12, color: "#64748b"}}>Unassigned</span>
@@ -1267,7 +1282,7 @@ export default function TaskFlow() {
                                                             padding: "7px 10px",
                                                             borderRadius: 7,
                                                             border: "none",
-                                                            background: isActive ? "#1e2433" : "transparent",
+                                                            background: isActive ? "#0f172a" : "transparent",
                                                             cursor: "pointer",
                                                             textAlign: "left",
                                                             transition: "background 0.15s",
@@ -1283,19 +1298,19 @@ export default function TaskFlow() {
                                                             width: 24,
                                                             height: 24,
                                                             borderRadius: "50%",
-                                                            background: AVATARS[ini] || "#94a3b8",
+                                                            background: AVATARS[ini] || "#334155",
                                                             display: "flex",
                                                             alignItems: "center",
                                                             justifyContent: "center",
                                                             fontSize: 9,
                                                             fontWeight: 700,
-                                                            color: "#fff",
+                                                            color: "#505050",
                                                             flexShrink: 0,
                                                         }}>{ini}</div>
                                                         <div>
                                                             <div style={{
                                                                 fontSize: 12,
-                                                                color: "#e2e8f0",
+                                                                color: "#0f172a",
                                                                 fontWeight: 500
                                                             }}>
                                                                 {member.user.name ?? member.user.email}
@@ -1303,7 +1318,7 @@ export default function TaskFlow() {
                                                             {member.user.name && (
                                                                 <div style={{
                                                                     fontSize: 10,
-                                                                    color: "#475569"
+                                                                    color: "#94a3b8"
                                                                 }}>{member.user.email}</div>
                                                             )}
                                                         </div>
@@ -1327,9 +1342,9 @@ export default function TaskFlow() {
                             alignItems: "center",
                             justifyContent: "space-between",
                             padding: "10px 0",
-                            borderBottom: "1px solid #1e1e24"
+                            borderBottom: "1px solid #0f172a"
                         }}>
-                            <span style={{fontSize: 12, color: "#475569", fontWeight: 500}}>Priority</span>
+                            <span style={{fontSize: 12, color: "#94a3b8", fontWeight: 500}}>Priority</span>
                             <div style={{display: "flex", gap: 4}}>
                                 {["Low", "Medium", "High"].map(p => {
                                     const isActive = selectedTask.priority === p;
@@ -1346,8 +1361,8 @@ export default function TaskFlow() {
                                                 padding: "3px 9px", borderRadius: 100, cursor: "pointer",
                                                 textTransform: "uppercase" as const,
                                                 background: isActive ? PRIORITY_BG[p] : "transparent",
-                                                color: isActive ? color : "#475569",
-                                                border: `1.5px solid ${isActive ? color + "66" : "#2d2d35"}`,
+                                                color: isActive ? color : "#94a3b8",
+                                                border: `1.5px solid ${isActive ? color + "66" : "#cbd5e1"}`,
                                                 fontFamily: "'DM Sans', sans-serif",
                                                 transition: "all 0.15s",
                                                 boxShadow: isActive ? `0 0 8px ${color}33` : "none",
@@ -1367,16 +1382,16 @@ export default function TaskFlow() {
                                 key={selectedTask.id}
                                 onFocus={e => (e.target.style.borderColor = project.color)}
                                 onBlur={async e => {
-                                    e.target.style.borderColor = "#1e1e24"; // ← сброс стиля
+                                    e.target.style.borderColor = "#0f172a"; // ← сброс стиля
                                     const description = e.target.value.trim() || null;
                                     if (description === selectedTask.description) return;
                                     await updateTask(selectedTask.id, {description});
                                     setSelectedTask(prev => prev ? {...prev, description} : null);
                                 }}
                                 style={{
-                                    width: "100%", background: "#0f0f11",
-                                    border: "1px solid #1e1e24", borderRadius: 8,
-                                    padding: 12, color: "#e2e8f0", fontSize: 12,
+                                    width: "100%", background: "#f1f5f9",
+                                    border: "1px solid #0f172a", borderRadius: 8,
+                                    padding: 12, color: "#0f172a", fontSize: 12,
                                     outline: "none", resize: "vertical", minHeight: 80,
                                     fontFamily: "'DM Sans', sans-serif", lineHeight: 1.6,
                                     transition: "border-color 0.15s",
@@ -1389,9 +1404,9 @@ export default function TaskFlow() {
                             <button
                                 onClick={() => handleToggleDone(selectedTask)}
                                 style={{
-                                    flex: 1, background: selectedTask.done ? "#1e1e24" : project.color,
+                                    flex: 1, background: selectedTask.done ? "#b9d2ff" : project.color,
                                     border: "none", borderRadius: 8, padding: "9px 0",
-                                    color: selectedTask.done ? "#64748b" : "#fff",
+                                    color: selectedTask.done ? "#64748b" : "#505050",
                                     fontSize: 12, fontWeight: 600, cursor: "pointer",
                                     fontFamily: "'DM Sans', sans-serif",
                                     boxShadow: !selectedTask.done ? `0 0 16px ${project.color}44` : "none",
@@ -1401,7 +1416,7 @@ export default function TaskFlow() {
                             <button
                                 onClick={() => handleDeleteTask(selectedTask.id)}
                                 style={{
-                                    background: "#1e1e24", border: "none", borderRadius: 8,
+                                    background: "#b9d2ff", border: "none", borderRadius: 8,
                                     padding: "9px 14px", color: "#ef4444", fontSize: 12,
                                     fontWeight: 600, cursor: "pointer", fontFamily: "'DM Sans', sans-serif",
                                 }}>🗑
@@ -1437,8 +1452,8 @@ function TaskCard({task, project, isDragging, onDragStart, onDragEnd, onToggle, 
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
             style={{
-                background: selected ? "#1a1a24" : hovered ? "#191922" : "#141417",
-                border: `1px solid ${selected ? project.color + "44" : "#1e1e24"}`,
+                background: selected ? "#f8fafc" : hovered ? "#f1f5f9" : "#e3f2ff",
+                border: `1px solid ${selected ? project.color + "44" : "#0f172a"}`,
                 borderRadius: 10, padding: "12px 14px", cursor: isDragging ? "grabbing" : "grab",
                 transition: "all 0.15s",
                 boxShadow: selected ? `0 0 0 1px ${project.color}22` : "none",
@@ -1455,17 +1470,17 @@ function TaskCard({task, project, isDragging, onDragStart, onDragEnd, onToggle, 
                     }}
                     style={{
                         width: 18, height: 18, borderRadius: 5, flexShrink: 0, marginTop: 1,
-                        border: `1.5px solid ${task.done ? project.color : "#2d2d35"}`,
+                        border: `1.5px solid ${task.done ? project.color : "#cbd5e1"}`,
                         background: task.done ? project.color : "none",
                         cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
                         transition: "all 0.2s",
                     }}
                 >
-                    {task.done && <span style={{color: "#fff", fontSize: 10, fontWeight: 700}}>✓</span>}
+                    {task.done && <span style={{color: "#505050", fontSize: 10, fontWeight: 700}}>✓</span>}
                 </button>
                 <div style={{flex: 1, minWidth: 0}}>
                     <div style={{
-                        fontSize: 13, fontWeight: 500, color: task.done ? "#475569" : "#e2e8f0",
+                        fontSize: 13, fontWeight: 500, color: task.done ? "#94a3b8" : "#0f172a",
                         textDecoration: task.done ? "line-through" : "none",
                         lineHeight: 1.4, marginBottom: 8,
                     }}>{task.title}</div>
@@ -1475,18 +1490,23 @@ function TaskCard({task, project, isDragging, onDragStart, onDragEnd, onToggle, 
                             initials={task.assignee?.name
                                 ? task.assignee.name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2)
                                 : task.assignee?.email?.[0].toUpperCase() ?? "?"}
-                            size={40}
+                            size={30}
                         />
                         {task.due &&
-                            <span style={{fontSize: 11, whiteSpace: 'nowrap', color: "#475569", marginLeft: "auto"}}>📅 {task.due}</span>}
+                            <span style={{
+                                fontSize: 11,
+                                whiteSpace: 'nowrap',
+                                color: "#94a3b8",
+                                marginLeft: "auto"
+                            }}>📅 {task.due}</span>}
                     </div>
                     {task.subtasks > 0 && (
                         <div style={{marginTop: 8, display: "flex", alignItems: "center", gap: 4}}>
-                            <div style={{flex: 1, height: 3, background: "#1e1e24", borderRadius: 2}}>
+                            <div style={{flex: 1, height: 3, background: "#0f172a", borderRadius: 2}}>
                                 <div
                                     style={{width: "30%", height: "100%", background: project.color, borderRadius: 2}}/>
                             </div>
-                            <span style={{fontSize: 10, color: "#475569"}}>{task.subtasks} subtasks</span>
+                            <span style={{fontSize: 10, color: "#94a3b8"}}>{task.subtasks} subtasks</span>
                         </div>
                     )}
                 </div>
@@ -1510,8 +1530,8 @@ function ListRow({task, project, onToggle, onDelete, onMove, onSelect, selected}
             style={{
                 display: "flex", alignItems: "center", gap: 12,
                 padding: "10px 12px", borderRadius: 8, cursor: "pointer",
-                background: selected ? "#1a1a24" : hovered ? "#191922" : "transparent",
-                border: `1px solid ${selected ? project.color + "44" : "transparent"}`,
+                background: selected ? "#f8fafc" : hovered ? "#e3f2ff" : "transparent",
+                border: `2px solid ${selected ? project.color + "44" : "#b9d2ff"}`,
                 transition: "all 0.15s", marginBottom: 2,
             }}
         >
@@ -1522,21 +1542,27 @@ function ListRow({task, project, onToggle, onDelete, onMove, onSelect, selected}
                 }}
                 style={{
                     width: 16, height: 16, borderRadius: 4, flexShrink: 0,
-                    border: `1.5px solid ${task.done ? project.color : "#2d2d35"}`,
+                    border: `1.5px solid ${task.done ? project.color : "#cbd5e1"}`,
                     background: task.done ? project.color : "none",
                     cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
                 }}
             >
-                {task.done && <span style={{color: "#fff", fontSize: 9, fontWeight: 700}}>✓</span>}
+                {task.done && <span style={{color: "#505050", fontSize: 9, fontWeight: 700}}>✓</span>}
             </button>
             <span style={{
                 flex: 1, fontSize: 13, fontWeight: 500,
-                color: task.done ? "#475569" : "#e2e8f0",
+                color: task.done ? "#94a3b8" : "#0f172a",
                 textDecoration: task.done ? "line-through" : "none",
             }}>{task.title}</span>
             <PriorityBadge priority={task.priority}/>
             {task.due &&
-                <span style={{fontSize: 11, whiteSpace: 'nowrap', color: "#475569", width: 'fit-content', textAlign: "right"}}>📅 {task.due}</span>}
+                <span style={{
+                    fontSize: 11,
+                    whiteSpace: 'nowrap',
+                    color: "#94a3b8",
+                    width: 'fit-content',
+                    textAlign: "right"
+                }}>📅 {task.due}</span>}
             {hovered && (
                 <div style={{display: "flex", gap: 4}} onClick={e => e.stopPropagation()}>
                     {["Todo", "In Progress", "Done"].filter(s => s !== task.section).map(s => {
